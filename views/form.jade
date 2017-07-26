@@ -1,0 +1,113 @@
+extends layout
+
+mixin input_text(label, eid, placeholder, model)
+    div.form-group
+        label.col-sm-3.control-label(for=eid)= label
+        div.col-sm-9
+            input.form-control(id=eid, type="text", placeholder=placeholder, ng-model=model)
+
+block content
+    div.container(ng-controller="Form")
+        h3
+            a(href='/') ICO form
+        form.form-horizontal
+            + input_text('Название', 'name', 'Ethereum', 'form.name')
+            + input_text('Ссылка на логотип', 'logo', 'http://ethereum.org/logo.png', 'form.logo')
+            + input_text('Символ', 'symbol', 'ETH', 'form.symbol')
+            + input_text('Платформа', 'platform', 'Ethereum', 'form.platform')
+            + input_text('Локация', 'location', 'Canada', 'form.location')
+
+            div.form-group
+                label.col-sm-3.control-label(for="descr") Описание
+                div.col-sm-9
+                    textarea#descr.form-control(rows="3", ng-model="form.descr")
+
+            div.form-group
+                label.col-sm-3.control-label Links
+                div.col-sm-9
+                    button.btn.btn-sm.btn-default(ng-click="addLink()")
+                        span.glyphicon.glyphicon-plus(aria-hidden="true")
+
+            div.form-group(ng-repeat="link in form.links")
+                div.col-sm-offset-3.col-sm-3
+                    select.form-control(ng-model="link.type")
+                        option(selected) Website
+                        option Blog
+                        option Whitepaper
+                        option Facebook
+                        option Twitter
+                        option Linkedin
+                        option Slack chat
+                        option Telegram chat
+                        option Github
+                div.col-sm-4
+                    input#link.form-control(type="text", placeholder="http://ethereum.org", ng-model="link.link")
+                div.col-sm-1
+                    button.btn.btn-default(ng-click="delLink($index)")
+                        span.glyphicon.glyphicon-minus(aria-hidden="true")
+
+            ul.nav.nav-tabs
+                li(role="presentation", style="font-weight: 700; margin-right: 2px; line-height: 1.42857143; display: block; padding: 10px 15px;") Сборы средств
+                li(role="presentation", ng-repeat="(idx, sale) in form.sales", ng-class="{active: idx == activeSale}")
+                    a(href="#", ng-click="selSale(idx)") {{sale.type || 'Undefined'}}
+                li(role="presentation")
+                    a(href="#", ng-click="addSale()")
+                        span.glyphicon.glyphicon-plus(aria-hidden="true")
+
+            div(style="margin-top: 20px")
+                div(ng-show="!!form.sales.length")
+
+                    div.form-group
+                        label.col-sm-3.control-label(for="sale_type") Тип
+                        div.col-sm-4
+                            select#sale_type.form-control(ng-model="form.sales[activeSale].type")
+                                option(selected) Presale
+                                option Crowdsale
+                        div.col-sm-1
+                            button.btn.btn-default(ng-click="delSale()")
+                                span.glyphicon.glyphicon-minus(aria-hidden="true")
+
+                    +input_text('Дата начала', 'sale_begin_date', '', 'form.sales[activeSale].begin_date')
+
+                    div.form-group
+                        label.col-sm-3.control-label(for="sale_end_date") Дата окончания
+                        div.col-sm-9
+                            input#sale_end_date.form-control(type="text", placeholder="", ng-model="form.sales[activeSale].end_date")
+
+                    div.form-group
+                        label.col-sm-3.control-label(for="sale_real_date") Реальное окончание
+                        div.col-sm-9
+                            input#sale_real_date.form-control(type="text", placeholder="", ng-model="form.sales[activeSale].real_date")
+
+                    hr
+
+                    div.form-group
+                        label.col-sm-3.control-label(for="sale_raised_btc") Собрано BTC
+                        div.col-sm-9
+                            input#sale_raised_btc.form-control(type="text", placeholder="", ng-model="form.sales[activeSale].raised_btc")
+
+                    div.form-group
+                        label.col-sm-3.control-label(for="sale_raised_usd") Собрано USD
+                        div.col-sm-9
+                            input#sale_raised_usd.form-control(type="text", placeholder="", ng-model="form.sales[activeSale].raised_usd")
+
+
+                    div.form-group
+                        label.col-sm-3.control-label(for="sale_course") Курс на окончание
+                        div.col-sm-9
+                            input#sale_course.form-control(type="text", placeholder="", ng-model="form.sales[activeSale].course")
+
+                    div.form-group
+                        label.col-sm-3.control-label(for="sale_source") Ссылка на источник
+                        div.col-sm-9
+                            input#sale_source.form-control(type="text", placeholder="", ng-model="form.sales[activeSale].link")
+
+                    hr
+
+                div.form-group
+                    div.col-sm-offset-3.col-sm-6
+                        button.btn.btn-primary(ng-click="save()") Save
+                        =" "
+                        button.btn.btn-warning(ng-click="cancel()") Cancel
+                    div.col-sm-3(style="text-align: right")
+                        button.btn.btn-danger(ng-click="delete()",disabled) Delete

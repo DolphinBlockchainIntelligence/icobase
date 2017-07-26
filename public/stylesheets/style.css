@@ -1,0 +1,14 @@
+table.table.table-striped thead td {
+  white-space: nowrap;
+}
+table.table.table-striped tbody tr:hover {
+  background-color: lightskyblue;
+  cursor: pointer;
+}
+table.table.table-striped td {
+  font-weight: 600;
+  color: #555;
+}
+table.table.table-striped td small{
+  font-weight: normal;
+}

@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  div.container(ng-controller="Index", style="margin-top: 50px")
+    div(style="float: right")
+      button.btn.btn-default(ng-click="showForm()") Добавить
+    div(style="clean: both")
+    table.table.table-striped
+      thead
+        th Название
+        th Обозначение
+        th Описание
+      tbody
+        each item in icolist
+          tr(ng-click="showForm(\"#{item._id}\")")
+            td= item.name
+            td= item.symbol
+            td
+              small= item.descr
